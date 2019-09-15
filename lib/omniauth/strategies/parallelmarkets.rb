@@ -14,7 +14,7 @@ module OmniAuth
 
       info do
         {
-          name: "#{raw_info['first_name']} #{raw_info['last_name']}",
+          name: raw_info['name'] || "#{raw_info['first_name']} #{raw_info['last_name']}",
           first_name: raw_info['first_name'],
           last_name: raw_info['last_name'],
           email: raw_info['email']
@@ -24,6 +24,7 @@ module OmniAuth
       extra do
         {
           accreditations: raw_info['accreditations'],
+          type: raw_info['type'],
           raw_info: raw_info
         }
       end
