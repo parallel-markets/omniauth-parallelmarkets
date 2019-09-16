@@ -52,11 +52,11 @@ describe OmniAuth::Strategies::ParallelMarkets do
 
   describe '#uid' do
     before :each do
-      allow(subject).to receive(:raw_info) { { 'uid' => 'a uid' } }
+      allow(subject).to receive(:raw_info) { { 'id' => 'a unique id' } }
     end
 
     it 'returns the id from raw_info' do
-      expect(subject.uid).to eq('a uid')
+      expect(subject.uid).to eq('a unique id')
     end
   end
 

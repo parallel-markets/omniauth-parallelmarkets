@@ -5,7 +5,7 @@
 
 This gem contains the [Parallel Markets](https://parallelmarkets.com) strategy for OmniAuth.
 
-ParallelMarkets uses the OAuth2 flow, you can read about at [docs.parallelmarkets.com/api](https://docs.parallelmarkets.com/api/).
+ParallelMarkets uses the OAuth2 flow, you can read about at [developer.parallelmarkets.com/api](https://developer.parallelmarkets.com).
 
 ## Installation
 
@@ -28,6 +28,7 @@ Or install it yourself as:
 You'll need to register your application with [Parallel Markets Support](mailto:help@parallelmarkets.com) and get `client_id` & `client_secret`.
 
 Here's an example for adding the middleware to a Rails app in config/initializers/omniauth.rb:
+
 ```ruby
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :parallelmarkets, ENV["CLIENT_ID"], ENV["CLIENT_SECRET"]
@@ -40,7 +41,7 @@ See the documentation for [OmniAuth](https://github.com/omniauth/omniauth) for m
 ```ruby
 {
   "provider"=>"parallelmarkets",
-  "uid"=>"123456",
+  "uid"=>"VXNlcjox",
   "info"=> {
     "name"=>"Snake Plissken",
     "email"=>"snake@example.com",
@@ -54,6 +55,8 @@ See the documentation for [OmniAuth](https://github.com/omniauth/omniauth) for m
     "expires"=>true
   },
   "extra"=> {
+    "type"=>"individual",
+    "user_id"=>"VXNlcjox",
     "accreditations"=>[
       {
         "id"=>321,

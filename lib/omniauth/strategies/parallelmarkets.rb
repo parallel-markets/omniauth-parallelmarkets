@@ -10,21 +10,23 @@ module OmniAuth
              authorize_url: '/v1/oauth/authorize',
              token_url: '/v1/oauth/token'
 
-      uid { raw_info['uid'] }
+      uid { raw_info['id'] }
 
       info do
         {
-          name: raw_info['name'] || "#{raw_info['first_name']} #{raw_info['last_name']}",
-          first_name: raw_info['first_name'],
-          last_name: raw_info['last_name'],
-          email: raw_info['email']
+          name: profile['name'] || "#{profile['first_name']} #{profile['last_name']}",
+          first_name: profile['first_name'],
+          last_name: profile['last_name'],
+          email: profile['email']
         }
       end
 
       extra do
         {
           accreditations: raw_info['accreditations'],
+          business_type: profile['business_type'],
           type: raw_info['type'],
+          user_id: raw_info['user_id'],
           raw_info: raw_info
         }
       end
@@ -39,6 +41,10 @@ module OmniAuth
 
       def raw_info
         @raw_info ||= access_token.get('/v1/me').parsed
+      end
+
+      def profile
+        @profile ||= raw_info.fetch('profile', {})
       end
     end
   end
