@@ -75,10 +75,13 @@ describe OmniAuth::Strategies::ParallelMarkets do
 
   describe '#extra' do
     before :each do
-      allow(subject).to receive(:raw_info) { { accreditations: [{ id: 123 }] } }
+      allow(subject).to receive(:raw_info) { { 'type' => 'individual' } }
+      allow(subject).to receive(:raw_accreditations) { { 'accreditations' => [{ id: 123 }] } }
     end
-
-    it { expect(subject.extra[:raw_info]).to eq(accreditations: [{ id: 123 }]) }
+    it 'should return correct extra data' do
+      expect(subject.extra[:accreditations]).to eq([{ id: 123 }])
+      expect(subject.extra[:type]).to eq('individual')
+    end
   end
 
   describe '#raw_info' do

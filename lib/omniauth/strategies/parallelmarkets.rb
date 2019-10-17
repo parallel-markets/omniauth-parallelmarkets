@@ -48,7 +48,7 @@ module OmniAuth
       end
 
       def raw_accreditations
-        @accreditations ||= access_token.get('/v1/accreditations').parsed
+        @raw_accreditations ||= access_token.get('/v1/accreditations').parsed
       end
 
       def accreditations
