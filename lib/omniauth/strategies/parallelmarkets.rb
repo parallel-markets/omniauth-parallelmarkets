@@ -9,6 +9,7 @@ module OmniAuth
              site: 'https://api.parallelmarkets.com',
              authorize_url: '/v1/oauth/authorize',
              token_url: '/v1/oauth/token'
+      option :authorize_options, %i[scope force_accreditation_check]
 
       uid { raw_info['id'] }
 
@@ -33,10 +34,15 @@ module OmniAuth
 
       def authorize_params
         super.tap do |params|
-          %w[scope client_options].each do |v|
-            params[v.to_sym] = request.params[v] if request.params[v]
+          options[:authorize_options].each do |k|
+            params[k] = request.params[k.to_s] if request.params[k.to_s]
           end
         end
+      end
+
+      # this is dumb, but https://github.com/omniauth/omniauth-oauth2/issues/93 is still open
+      def callback_url
+        options[:redirect_uri] || (full_host + script_name + callback_path)
       end
 
       def raw_info
