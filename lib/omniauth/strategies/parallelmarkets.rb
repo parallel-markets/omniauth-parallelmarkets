@@ -25,6 +25,7 @@ module OmniAuth
       extra do
         {
           accreditations: accreditations,
+          indicated_unaccredited: indicated_unaccredited,
           business_type: profile['business_type'],
           type: raw_info['type'],
           user_id: raw_info['user_id'],
@@ -55,6 +56,10 @@ module OmniAuth
 
       def raw_accreditations
         @raw_accreditations ||= access_token.get('/v1/accreditations').parsed
+      end
+
+      def indicated_unaccredited
+        raw_accreditations['indicated_unaccredited']
       end
 
       def accreditations
