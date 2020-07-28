@@ -27,6 +27,12 @@ module OmniAuth
           accreditations: accreditations,
           indicated_unaccredited: indicated_unaccredited,
           business_type: profile['business_type'],
+          primary_contact: profile['primary_contact'].nil? ? nil : {
+            name: "#{profile['primary_contact']['first_name']} #{profile['primary_contact']['last_name']}",
+            first_name: profile['primary_contact']['first_name'],
+            last_name: profile['primary_contact']['last_name'],
+            email: profile['primary_contact']['email']
+          },
           type: raw_info['type'],
           user_id: raw_info['user_id'],
           raw_info: raw_info
