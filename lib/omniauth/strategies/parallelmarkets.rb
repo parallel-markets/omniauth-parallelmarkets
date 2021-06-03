@@ -9,7 +9,7 @@ module OmniAuth
              site: 'https://api.parallelmarkets.com',
              authorize_url: '/v1/oauth/authorize',
              token_url: '/v1/oauth/token'
-      option :authorize_options, %i[scope force_accreditation_check]
+      option :authorize_options, %i[scope force_accreditation_check force_identity_check]
 
       uid { raw_info['id'] }
 
