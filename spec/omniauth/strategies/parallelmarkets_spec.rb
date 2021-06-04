@@ -44,12 +44,6 @@ describe OmniAuth::Strategies::ParallelMarkets do
     end
   end
 
-  describe '#callback_path' do
-    it 'has the correct callback path' do
-      expect(subject.callback_path).to eq('/auth/parallelmarkets/callback')
-    end
-  end
-
   describe '#uid' do
     before :each do
       allow(subject).to receive(:raw_info) { { 'id' => 'a unique id' } }

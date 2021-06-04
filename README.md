@@ -1,5 +1,4 @@
 [![Gem Version](https://badge.fury.io/rb/omniauth-parallelmarkets.svg)](https://badge.fury.io/rb/omniauth-parallelmarkets)
-[![Build Status](https://travis-ci.org/parallel-markets/omniauth-parallelmarkets.svg?branch=master)](https://travis-ci.org/parallel-markets/omniauth-parallelmarkets)
 
 # OmniAuth ParallelMarkets
 
