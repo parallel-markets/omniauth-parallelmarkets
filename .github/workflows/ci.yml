@@ -15,4 +15,4 @@ jobs:
           ruby-version: '3.0.1'
           bundler-cache: true
 
-      - run: rake
+      - run: bundle exec rake

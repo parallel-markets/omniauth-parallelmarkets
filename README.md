@@ -1,4 +1,5 @@
 [![Gem Version](https://badge.fury.io/rb/omniauth-parallelmarkets.svg)](https://badge.fury.io/rb/omniauth-parallelmarkets)
+[![Tests](https://github.com/parallel-markets/omniauth-parallelmarkets/actions/workflows/ci.yml/badge.svg)](https://github.com/parallel-markets/omniauth-parallelmarkets/actions/workflows/ci.yml)
 
 # OmniAuth ParallelMarkets
 
