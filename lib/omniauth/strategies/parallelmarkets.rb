@@ -13,29 +13,22 @@ module OmniAuth
 
       uid { raw_info['id'] }
 
-      info do
-        {
-          name: profile['name'] || "#{profile['first_name']} #{profile['last_name']}",
-          first_name: profile['first_name'],
-          last_name: profile['last_name'],
-          email: profile['email']
-        }
-      end
+      info { to_contact_details(profile) }
 
       extra do
         {
-          accreditations: accreditations,
-          indicated_unaccredited: indicated_unaccredited,
+          authorize_scopes: authorize_scopes,
+          # from /api/v1/me
           business_type: profile['business_type'],
-          primary_contact: profile['primary_contact'].nil? ? nil : {
-            name: "#{profile['primary_contact']['first_name']} #{profile['primary_contact']['last_name']}",
-            first_name: profile['primary_contact']['first_name'],
-            last_name: profile['primary_contact']['last_name'],
-            email: profile['primary_contact']['email']
-          },
+          primary_contact: to_contact_details(profile['primary_contact']),
+          raw_info: raw_info,
           type: raw_info['type'],
           user_id: raw_info['user_id'],
-          raw_info: raw_info
+          user_profile: to_contact_details(user_profile),
+          user_providing_for: raw_info['user_providing_for'],
+          # from /api/v1/accreditations
+          accreditations: accreditations,
+          indicated_unaccredited: raw_accreditations['indicated_unaccredited']
         }
       end
 
@@ -52,24 +45,42 @@ module OmniAuth
         options[:redirect_uri] || (full_host + script_name + callback_path)
       end
 
+      def scope?(single_scope)
+        authorize_scopes.include?(single_scope.to_s)
+      end
+
+      # if given ?scope query parameter, use that. otherwise, use server-side provider configuration
+      def authorize_scopes
+        @authorize_scopes ||= (env['omniauth.params']['scope'] || authorize_params['scope']).split(' ')
+      end
+
       def raw_info
-        @raw_info ||= access_token.get('/v1/me').parsed
+        @raw_info ||= scope?(:profile) ? access_token.get('/v1/me').parsed : {}
       end
 
       def profile
         @profile ||= raw_info.fetch('profile', {})
       end
 
-      def raw_accreditations
-        @raw_accreditations ||= access_token.get('/v1/accreditations').parsed
+      def user_profile
+        @user_profile ||= raw_info.fetch('user_profile', {})
       end
 
-      def indicated_unaccredited
-        raw_accreditations['indicated_unaccredited']
+      def raw_accreditations
+        @raw_accreditations ||= scope?(:accreditation_status) ? access_token.get('/v1/accreditations').parsed : {}
       end
 
       def accreditations
-        raw_accreditations['accreditations']
+        @accreditations ||= raw_accreditations.fetch('accreditations', [])
+      end
+
+      def to_contact_details(contact)
+        (contact.nil? || contact.empty?) ? {} : {
+          name: contact['name'] || "#{contact['first_name']} #{contact['last_name']}",
+          first_name: contact['first_name'],
+          last_name: contact['last_name'],
+          email: contact['email']
+        }
       end
     end
   end
