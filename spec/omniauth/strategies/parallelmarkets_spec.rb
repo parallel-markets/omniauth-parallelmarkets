@@ -44,6 +44,22 @@ describe OmniAuth::Strategies::ParallelMarkets do
     end
   end
 
+  describe '#scope?' do
+    before :each do
+      allow(subject).to receive(:authorize_params) { { 'scope' => 'accreditation_status' } }
+    end
+
+    it 'is false when not in the default config and not overridden' do
+      allow(subject).to receive(:env) { { 'omniauth.params' => {} } }
+      expect(subject.scope?(:identity)).to be false
+    end
+
+    it 'is true when scope has been overridden via query param' do
+      allow(subject).to receive(:env) { { 'omniauth.params' => { 'scope' => 'bar profile baz' } } }
+      expect(subject.scope?(:profile)).to be true
+    end
+  end
+
   describe '#uid' do
     before :each do
       allow(subject).to receive(:raw_info) { { 'id' => 'a unique id' } }
@@ -56,7 +72,7 @@ describe OmniAuth::Strategies::ParallelMarkets do
 
   describe '#info' do
     before :each do
-      allow(subject).to receive(:raw_info) { {} }
+      allow(subject).to receive(:raw_info) { { 'profile' => { name: "Foo Inc" } } }
     end
 
     context 'has all the necessary fields' do
@@ -71,7 +87,10 @@ describe OmniAuth::Strategies::ParallelMarkets do
     before :each do
       allow(subject).to receive(:raw_info) { { 'type' => 'individual' } }
       allow(subject).to receive(:raw_accreditations) { { 'accreditations' => [{ id: 123 }] } }
+      allow(subject).to receive(:env) { { 'omniauth.params' => {} } }
+      allow(subject).to receive(:authorize_params) { { 'scope' => 'profile accreditation_status' } }
     end
+
     it 'should return correct extra data' do
       expect(subject.extra[:accreditations]).to eq([{ id: 123 }])
       expect(subject.extra[:type]).to eq('individual')
@@ -84,6 +103,7 @@ describe OmniAuth::Strategies::ParallelMarkets do
       response = double('response', parsed: { first_name: 'Snake' })
       expect(access_token).to receive(:get).with('/v1/me').and_return(response)
       allow(subject).to receive(:access_token) { access_token }
+      allow(subject).to receive(:env) { { 'omniauth.params' => { 'scope' => 'profile'} } }
     end
 
     it 'returns parsed response from access token' do
