@@ -28,7 +28,9 @@ module OmniAuth
           user_providing_for: raw_info['user_providing_for'],
           # from /api/v1/accreditations
           accreditations: accreditations,
-          indicated_unaccredited: raw_accreditations['indicated_unaccredited']
+          indicated_unaccredited: raw_accreditations['indicated_unaccredited'],
+          # from /api/v1/identity
+          identity_details: identity_details
         }
       end
 
@@ -72,6 +74,14 @@ module OmniAuth
 
       def accreditations
         @accreditations ||= raw_accreditations.fetch('accreditations', [])
+      end
+
+      def raw_identity
+        @raw_identity ||= scope?(:identity) ? access_token.get('/v1/identity').parsed : {}
+      end
+
+      def identity_details
+        @identity_details ||= raw_identity['identity_details']
       end
 
       def to_contact_details(contact)
