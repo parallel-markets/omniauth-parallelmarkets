@@ -1,3 +1,6 @@
+> [!CAUTION]
+> This gem is no longer maintained.  Please use the [omniauth-oauth2](https://rubygems.org/gems/omniauth-oauth2) gem directly.
+
 [![Gem Version](https://badge.fury.io/rb/omniauth-parallelmarkets.svg)](https://badge.fury.io/rb/omniauth-parallelmarkets)
 [![Tests](https://github.com/parallel-markets/omniauth-parallelmarkets/actions/workflows/ci.yml/badge.svg)](https://github.com/parallel-markets/omniauth-parallelmarkets/actions/workflows/ci.yml)
 
